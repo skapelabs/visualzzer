@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}How to Use - Data Structure Visualizer{% endblock %}
+
+{% block content %}
+<div class="how-to-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>How to Use the Sorting Visualizer</h1>
+            <p class="page-subtitle">Learn how to control and interact with the sorting algorithm visualizer</p>
+        </div>
+
+        <div class="instructions-grid">
+            <div class="instruction-section">
+                <h2>🎮 Keyboard Controls</h2>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <div class="control-key">B</div>
+                        <div class="control-desc">Select Bubble Sort</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">I</div>
+                        <div class="control-desc">Select Insertion Sort</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">S</div>
+                        <div class="control-desc">Select Selection Sort</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">Q</div>
+                        <div class="control-desc">Select Quick Sort</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">M</div>
+                        <div class="control-desc">Select Merge Sort</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">H</div>
+                        <div class="control-desc">Select Heap Sort</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">A</div>
+                        <div class="control-desc">Set Ascending Order</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">D</div>
+                        <div class="control-desc">Set Descending Order</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">SPACE</div>
+                        <div class="control-desc">Start Selected Sort</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">R</div>
+                        <div class="control-desc">Generate Random Numbers</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">X</div>
+                        <div class="control-desc">Instant Sort (No Animation)</div>
+                    </div>
+                    <div class="control-item">
+                        <div class="control-key">ESC</div>
+                        <div class="control-desc">Quit Application</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instruction-section">
+                <h2>📝 Custom Number Input</h2>
+                <div class="input-instructions">
+                    <h3>When you start the visualizer, you can:</h3>
+                    <ul>
+                        <li><strong>Use Random Numbers:</strong> Press Enter or leave the input empty</li>
+                        <li><strong>Enter Custom Numbers:</strong> Type your own numbers</li>
+                    </ul>
+                    
+                    <h3>Input Format:</h3>
+                    <ul>
+                        <li>Separate numbers with <strong>spaces</strong> or <strong>commas</strong></li>
+                        <li>Maximum <strong>25 numbers</strong> allowed</li>
+                        <li>Numbers must be between <strong>1 and 1000</strong></li>
+                    </ul>
+                    
+                    <div class="examples">
+                        <h4>Examples:</h4>
+                        <div class="example-item">
+                            <code>10 5 8 3 7 12 15 9</code>
+                            <span>Using spaces</span>
+                        </div>
+                        <div class="example-item">
+                            <code>10,5,8,3,7,12,15,9</code>
+                            <span>Using commas</span>
+                        </div>
+                        <div class="example-item">
+                            <code>100 50 25 75 90 60 30</code>
+                            <span>Larger numbers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="workflow-section">
+            <h2>🚀 Step-by-Step Workflow</h2>
+            <div class="workflow-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Start the Visualizer</h3>
+                        <p>Click the "See in Action" button below to launch the visualizer application.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Choose Your Data</h3>
+                        <p>Decide whether to use random numbers or enter your own custom numbers.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Select Algorithm</h3>
+                        <p>Press B, I, S, Q, M, or H to choose your sorting algorithm.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Choose Direction</h3>
+                        <p>Press A for ascending or D for descending order.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Start Visualization</h3>
+                        <p>Press SPACE to begin the animated sorting process.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3>Experiment</h3>
+                        <p>Try different algorithms, press R for new random data, or X for instant sorting.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips-section">
+            <h2>💡 Pro Tips</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h3>Compare Algorithms</h3>
+                    <p>Use the same dataset with different algorithms to see the performance differences.</p>
+                </div>
+                <div class="tip-card">
+                    <h3>Watch the Colors</h3>
+                    <p>Red bars show elements being compared or swapped during the sorting process.</p>
+                </div>
+                <div class="tip-card">
+                    <h3>Check Time Complexity</h3>
+                    <p>The info box shows theoretical time complexity and actual execution time.</p>
+                </div>
+                <div class="tip-card">
+                    <h3>Try Edge Cases</h3>
+                    <p>Test with already sorted data, reverse sorted data, or duplicate values.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <div class="action-content">
+                <h2>Ready to Start Visualizing?</h2>
+                <p>Launch the interactive sorting algorithm visualizer and see the magic happen!</p>
+                <a href="{{ url_for('visualizer') }}" class="btn btn-primary btn-large">See in Action</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

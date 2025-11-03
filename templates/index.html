@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Data Structure Visualizer{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1 class="hero-title">Data Structure Visualizer</h1>
+            <p class="hero-subtitle">
+                A student learning project to visualize data structures and algorithms in action. 
+                Explore how different data structures work and see sorting algorithms step-by-step.
+            </p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('algorithms') }}" class="btn btn-primary">Learn Algorithms</a>
+                <a href="{{ url_for('how_to') }}" class="btn btn-secondary">How to Use</a>
+                <a href="{{ url_for('visualizer') }}" class="btn btn-secondary">Try It Now</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="algorithm-preview">
+                <div class="bars-container">
+                    <div class="bar" style="height: 20%"></div>
+                    <div class="bar" style="height: 80%"></div>
+                    <div class="bar" style="height: 40%"></div>
+                    <div class="bar" style="height: 100%"></div>
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 30%"></div>
+                    <div class="bar" style="height: 90%"></div>
+                    <div class="bar" style="height: 10%"></div>
+                </div>
+                <p class="preview-text">Interactive Bar Visualization</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="container">
+        <h2 class="section-title">Why This Project?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Learning Focus</h3>
+                <p>Built to help students understand how sorting algorithms work step by step.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Hands-on Learning</h3>
+                <p>Control the visualization with keyboard shortcuts and see algorithms in action.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Multiple Algorithms</h3>
+                <p>Includes 6 different sorting algorithms: Bubble, Insertion, Selection, Quick, Merge, and Heap Sort.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Visual Learning</h3>
+                <p>Clear graphics and animations to make complex algorithms easier to understand.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Experiment Friendly</h3>
+                <p>Enter your own numbers or use random data. Try different scenarios and see what happens.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⏱️</div>
+                <h3>Performance Insights</h3>
+                <p>See time complexity information and actual execution times to understand efficiency.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="algorithms-section">
+    <div class="container">
+        <h2 class="section-title">Supported Algorithms</h2>
+        <div class="algorithms-grid">
+            <div class="algorithm-card">
+                <h3>Bubble Sort</h3>
+                <p><strong>Time Complexity:</strong> O(n²)</p>
+                <p>Simple comparison-based algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.</p>
+            </div>
+            <div class="algorithm-card">
+                <h3>Insertion Sort</h3>
+                <p><strong>Time Complexity:</strong> O(n²)</p>
+                <p>Builds the final sorted array one item at a time. It is much less efficient on large lists than more advanced algorithms.</p>
+            </div>
+            <div class="algorithm-card">
+                <h3>Selection Sort</h3>
+                <p><strong>Time Complexity:</strong> O(n²)</p>
+                <p>Finds the minimum element from the unsorted part and puts it at the beginning. Maintains two subarrays in a given array.</p>
+            </div>
+            <div class="algorithm-card">
+                <h3>Quick Sort</h3>
+                <p><strong>Time Complexity:</strong> O(n log n)</p>
+                <p>Divide and conquer algorithm that picks an element as pivot and partitions the array around the picked pivot.</p>
+            </div>
+            <div class="algorithm-card">
+                <h3>Merge Sort</h3>
+                <p><strong>Time Complexity:</strong> O(n log n)</p>
+                <p>Divide and conquer algorithm that divides the input array into two halves, calls itself for the two halves, and then merges the two sorted halves.</p>
+            </div>
+            <div class="algorithm-card">
+                <h3>Heap Sort</h3>
+                <p><strong>Time Complexity:</strong> O(n log n)</p>
+                <p>Comparison-based sorting algorithm that uses a binary heap data structure to sort elements.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="data-structures-section">
+    <div class="container">
+        <h2 class="section-title">Data Structures</h2>
+        <div class="data-structures-grid">
+            <div class="ds-item coming-soon">
+                <div class="ds-icon">🌳</div>
+                <h3>Binary Trees</h3>
+                <p>Visualize tree traversals, insertions, and deletions</p>
+                <div class="coming-soon-badge">Coming Soon</div>
+            </div>
+            <div class="ds-item coming-soon">
+                <div class="ds-icon">🔗</div>
+                <h3>Linked Lists</h3>
+                <p>See how nodes are connected and manipulated</p>
+                <div class="coming-soon-badge">Coming Soon</div>
+            </div>
+            <div class="ds-item coming-soon">
+                <div class="ds-icon">📚</div>
+                <h3>Stacks & Queues</h3>
+                <p>Understand LIFO and FIFO operations</p>
+                <div class="coming-soon-badge">Coming Soon</div>
+            </div>
+            <div class="ds-item coming-soon">
+                <div class="ds-icon">🗺️</div>
+                <h3>Hash Tables</h3>
+                <p>Explore key-value mappings and collisions</p>
+                <div class="coming-soon-badge">Coming Soon</div>
+            </div>
+            <div class="ds-item coming-soon">
+                <div class="ds-icon">🕸️</div>
+                <h3>Graphs</h3>
+                <p>Visualize nodes, edges, and graph algorithms</p>
+                <div class="coming-soon-badge">Coming Soon</div>
+            </div>
+            <div class="ds-item coming-soon">
+                <div class="ds-icon">🏗️</div>
+                <h3>Heaps</h3>
+                <p>Understand priority queues and heap operations</p>
+                <div class="coming-soon-badge">Coming Soon</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tech-stack-section">
+    <div class="container">
+        <h2 class="section-title">Tech Stack</h2>
+        <div class="tech-stack-grid">
+            <div class="tech-item">
+                <div class="tech-icon">🐍</div>
+                <h3>Python</h3>
+                <p>Core programming language for the sorting algorithms and backend logic</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🖼️</div>
+                <h3>PyQt5</h3>
+                <p>GUI framework for creating interactive input dialogs and user interfaces</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🎮</div>
+                <h3>Pygame</h3>
+                <p>Game development library for creating the visual sorting animations</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🌐</div>
+                <h3>HTML</h3>
+                <p>Markup language for structuring the web pages and content</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🎨</div>
+                <h3>CSS</h3>
+                <p>Styling language for designing the visual appearance and layout</p>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">⚡</div>
+                <h3>JavaScript</h3>
+                <p>Programming language for adding interactivity and dynamic features</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Learn About Sorting Algorithms?</h2>
+            <p>Explore how different algorithms work, then see them in action!</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('algorithms') }}" class="btn btn-primary btn-large">Learn Algorithms</a>
+                <a href="{{ url_for('visualizer') }}" class="btn btn-secondary btn-large">Try Visualizer</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

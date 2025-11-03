@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Visualizer - Data Structure Visualizer{% endblock %}
+
+{% block content %}
+<div class="visualizer-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>Data Structure Visualizer</h1>
+            <p class="page-subtitle">Interactive visualization of data structures and algorithms</p>
+        </div>
+
+        <div class="visualizer-controls">
+            <div class="control-panel">
+                <h3>Quick Start</h3>
+                <div class="control-buttons">
+                    <button id="randomBtn" class="btn btn-secondary">Generate Random Numbers</button>
+                    <button id="customBtn" class="btn btn-secondary">Enter Custom Numbers</button>
+                </div>
+            </div>
+
+            <div class="input-panel" id="inputPanel" style="display: none;">
+                <h3>Enter Your Numbers</h3>
+                <div class="input-group">
+                    <input type="text" id="numberInput" placeholder="Enter numbers (e.g., 10 5 8 3 7 or 10,5,8,3,7)" class="input-field">
+                    <button id="validateBtn" class="btn btn-primary">Validate & Use</button>
+                </div>
+                <div class="input-help">
+                    <p>• Separate numbers with spaces or commas</p>
+                    <p>• Maximum 25 numbers allowed</p>
+                    <p>• Numbers should be between 1 and 1000</p>
+                </div>
+                <div id="inputResult" class="input-result"></div>
+            </div>
+
+            <div class="launch-panel">
+                <h3>Launch Visualizer</h3>
+                <div class="launch-info">
+                    <p>Click the button below to start the Python visualizer application.</p>
+                    <p><strong>Note:</strong> The visualizer will open in a separate window.</p>
+                    <div class="requirements-info">
+                        <h4>Requirements:</h4>
+                        <ul>
+                            <li>Python must be installed</li>
+                            <li>Pygame must be installed: <code>pip install pygame</code></li>
+                            <li>If pygame is not installed, you'll see an error message</li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="launchBtn" class="btn btn-primary btn-large" disabled>Launch Visualizer</button>
+                <div id="launchStatus" class="launch-status"></div>
+            </div>
+        </div>
+
+        <div class="algorithm-info">
+            <h3>Available Algorithms</h3>
+            <div class="algorithms-list">
+                <div class="algorithm-item">
+                    <span class="algorithm-key">B</span>
+                    <span class="algorithm-name">Bubble Sort</span>
+                    <span class="algorithm-complexity">O(n²)</span>
+                </div>
+                <div class="algorithm-item">
+                    <span class="algorithm-key">I</span>
+                    <span class="algorithm-name">Insertion Sort</span>
+                    <span class="algorithm-complexity">O(n²)</span>
+                </div>
+                <div class="algorithm-item">
+                    <span class="algorithm-key">S</span>
+                    <span class="algorithm-name">Selection Sort</span>
+                    <span class="algorithm-complexity">O(n²)</span>
+                </div>
+                <div class="algorithm-item">
+                    <span class="algorithm-key">Q</span>
+                    <span class="algorithm-name">Quick Sort</span>
+                    <span class="algorithm-complexity">O(n log n)</span>
+                </div>
+                <div class="algorithm-item">
+                    <span class="algorithm-key">M</span>
+                    <span class="algorithm-name">Merge Sort</span>
+                    <span class="algorithm-complexity">O(n log n)</span>
+                </div>
+                <div class="algorithm-item">
+                    <span class="algorithm-key">H</span>
+                    <span class="algorithm-name">Heap Sort</span>
+                    <span class="algorithm-complexity">O(n log n)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-info">
+            <h3>Controls</h3>
+            <div class="controls-list">
+                <div class="control-item">
+                    <span class="control-key">A</span>
+                    <span class="control-desc">Ascending Order</span>
+                </div>
+                <div class="control-item">
+                    <span class="control-key">D</span>
+                    <span class="control-desc">Descending Order</span>
+                </div>
+                <div class="control-item">
+                    <span class="control-key">SPACE</span>
+                    <span class="control-desc">Start Sorting</span>
+                </div>
+                <div class="control-item">
+                    <span class="control-key">R</span>
+                    <span class="control-desc">Random Numbers</span>
+                </div>
+                <div class="control-item">
+                    <span class="control-key">X</span>
+                    <span class="control-desc">Instant Sort</span>
+                </div>
+                <div class="control-item">
+                    <span class="control-key">ESC</span>
+                    <span class="control-desc">Quit</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const randomBtn = document.getElementById('randomBtn');
+    const customBtn = document.getElementById('customBtn');
+    const inputPanel = document.getElementById('inputPanel');
+    const numberInput = document.getElementById('numberInput');
+    const validateBtn = document.getElementById('validateBtn');
+    const inputResult = document.getElementById('inputResult');
+    const launchBtn = document.getElementById('launchBtn');
+    const launchStatus = document.getElementById('launchStatus');
+
+    let selectedNumbers = null;
+
+    // Random numbers button
+    randomBtn.addEventListener('click', function() {
+        fetch('/api/random-numbers?count=25')
+            .then(response => response.json())
+            .then(data => {
+                selectedNumbers = data.numbers;
+                inputResult.innerHTML = `
+                    <div class="success-message">
+                        <h4>Random Numbers Generated</h4>
+                        <p>Count: ${data.count} | Min: ${data.min} | Max: ${data.max}</p>
+                        <p>Numbers: ${data.numbers.join(', ')}</p>
+                    </div>
+                `;
+                launchBtn.disabled = false;
+                inputPanel.style.display = 'none';
+            })
+            .catch(error => {
+                inputResult.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+            });
+    });
+
+    // Custom numbers button
+    customBtn.addEventListener('click', function() {
+        inputPanel.style.display = 'block';
+        numberInput.focus();
+    });
+
+    // Validate numbers
+    validateBtn.addEventListener('click', function() {
+        const inputText = numberInput.value.trim();
+        
+        fetch('/api/validate-numbers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ numbers: inputText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.valid) {
+                selectedNumbers = data.numbers;
+                inputResult.innerHTML = `
+                    <div class="success-message">
+                        <h4>Valid Numbers</h4>
+                        <p>Count: ${data.count} | Min: ${data.min} | Max: ${data.max}</p>
+                        <p>Numbers: ${data.numbers.join(', ')}</p>
+                    </div>
+                `;
+                launchBtn.disabled = false;
+            } else {
+                inputResult.innerHTML = `<div class="error-message">${data.error}</div>`;
+                launchBtn.disabled = true;
+            }
+        })
+        .catch(error => {
+            inputResult.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+        });
+    });
+
+    // Check dependencies on page load
+    fetch('/api/check-dependencies')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.pygame_available) {
+                launchStatus.innerHTML = `
+                    <div class="error-message">
+                        <h4>Pygame Not Installed</h4>
+                        <p>Pygame is required to run the visualizer. Please install it first:</p>
+                        <code>pip install pygame</code>
+                        <p>Then refresh this page and try again.</p>
+                    </div>
+                `;
+                launchBtn.disabled = true;
+            } else {
+                launchStatus.innerHTML = `
+                    <div class="success-message">
+                        <h4>Dependencies Check</h4>
+                        <p>✅ Python ${data.python_version}</p>
+                        <p>✅ Pygame ${data.pygame_version}</p>
+                        <p>Ready to launch visualizer!</p>
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            launchStatus.innerHTML = `<div class="error-message">Error checking dependencies: ${error.message}</div>`;
+        });
+
+    // Launch visualizer
+    launchBtn.addEventListener('click', function() {
+        launchBtn.disabled = true;
+        launchStatus.innerHTML = '<div class="loading-message">Starting visualizer...</div>';
+        
+        fetch('/run-visualizer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ numbers: selectedNumbers })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    launchStatus.innerHTML = '<div class="success-message">Visualizer started successfully! Check for a new window.</div>';
+                } else {
+                    launchStatus.innerHTML = `<div class="error-message">Error: ${data.error}</div>`;
+                    launchBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                launchStatus.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+                launchBtn.disabled = false;
+            });
+    });
+
+    // Enter key support for input
+    numberInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            validateBtn.click();
+        }
+    });
+});
+</script>
+{% endblock %}

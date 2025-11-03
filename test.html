@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package Comparison</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8ffff 0%, #e6f7f9 100%);
+            color: rgba(13, 33, 68, 1);
+            overflow: hidden;
+        }
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 40px 70px 20px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(150, 199, 98, 0.15);
+            margin: 0 auto;
+        }
+        .comparison-table th {
+            background: rgba(150, 199, 98, 1);
+            color: white;
+            font-weight: 600;
+            padding: 16px;
+            text-align: center;
+            position: relative;
+        }
+        .comparison-table th:first-child {
+            text-align: left;
+            background: rgba(13, 33, 68, 1);
+            width: 28%;
+        }
+        .comparison-table td {
+            padding: 14px 16px;
+            text-align: center;
+            border-bottom: 1px solid rgba(150, 199, 98, 0.1);
+        }
+        .comparison-table tr:nth-child(odd) td {
+            background-color: rgba(150, 199, 98, 0.05);
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .checkmark {
+            color: rgba(150, 199, 98, 1);
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .cross {
+            color: #e74c3c;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .addon-text {
+            color: rgba(13, 33, 68, 0.7);
+            font-weight: 600;
+        }
+        .package-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .package-price {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        .accent-shape {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            right: -150px;
+            background: linear-gradient(135deg, rgba(150, 199, 98, 0.05), rgba(150, 199, 98, 0.1));
+        }
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -100px;
+            left: -100px;
+            background: linear-gradient(135deg, rgba(150, 199, 98, 0.05), rgba(150, 199, 98, 0.1));
+        }
+        .brand-name {
+            font-weight: 800;
+            background: rgba(150, 199, 98, 1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .popular-badge {
+            position: absolute;
+            top: 0px;
+            right: 20px;
+            background: rgba(13, 33, 68, 1);
+            color: white;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(13, 33, 68, 0.3);
+            z-index: 30;
+        }
+        .premium-badge {
+            position: absolute;
+            top: 0px;
+            right: 20px;
+            background: rgba(13, 33, 68, 1);
+            color: white;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(13, 33, 68, 0.3);
+            z-index: 30;
+        }
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(150, 199, 98, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: rgba(150, 199, 98, 1);
+        }
+        .table-note {
+            margin-top: 15px;
+            font-size: 16px;
+            color: rgba(13, 33, 68, 0.7);
+            text-align: center;
+            font-style: italic;
+        }
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            text-align: right;
+            font-size: 14px;
+            color: rgba(13, 33, 68, 0.7);
+        }
+        .content-container {
+            flex-grow: 1;
+            padding: 0 70px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .feature-card {
+            background: rgba(150, 199, 98, 0.15);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(150, 199, 98, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="accent-shape shape-1"></div>
+        <div class="accent-shape shape-2"></div>
+        
+        <div class="header">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-4xl font-bold" style="color: rgba(13, 33, 68, 1);">Package Comparison</h1>
+                <div class="text-2xl font-semibold">
+                    <span class="brand-name">SkapeLabs</span>
+                </div>
+            </div>
+            <p class="text-gray-600 text-lg">Find the perfect plan for your CA firm's digital needs</p>
+        </div>
+        
+        <div class="content-container">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>
+                            <div class="package-header">
+                                Basic
+                                <span class="package-price">₹9,999</span>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="package-header">
+                                Growth
+                                <span class="package-price">₹19,999 + ₹999/mo</span>
+                            </div>
+                            <div class="popular-badge">Most Popular</div>
+                        </th>
+                        <th>
+                            <div class="package-header">
+                                Premium
+                                <span class="package-price">₹39,999 + ₹2,499/mo</span>
+                            </div>
+                            <div class="premium-badge">PREMIUM</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                            Mobile Responsive
+                        </td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-user"></i></div>
+                            About Page (Profile + Qualifications)
+                        </td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+                            Services Page (Tax, Audit, GST)
+                        </td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            Contact Page + Google Map
+                        </td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-envelope"></i></div>
+                            Professional Email Setup
+                        </td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-lock"></i></div>
+                            SSL / Security
+                        </td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-blog"></i></div>
+                            Blog / Resources for SEO
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-download"></i></div>
+                            Download Section (Forms, Docs)
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+                            Appointment / Booking Form
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-users"></i></div>
+                            Team Page / Partner Profiles
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                            Chatbot (FAQs)
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                            Analytics / Visitor Tracking
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-user-circle"></i></div>
+                            Client Portal (Upload / Download)
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-credit-card"></i></div>
+                            Online Payment Integration
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                            Automated Email Alerts
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-language"></i></div>
+                            Multi-language Support
+                        </td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td class="flex items-center">
+                            <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                            Priority Support & Maintenance
+                        </td>
+                        <td><span class="addon-text">Optional</span></td>
+                        <td><span class="addon-text">Optional</span></td>
+                        <td><span class="checkmark">✓</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p class="table-note">All packages include responsive design, basic SEO setup, and professional support</p>
+        </div>
+        
+        <div class="footer">
+            <span class="brand-name">SkapeLabs</span> | +91 80815 27005 | skapelabs@gmail.com
+        </div>
+    </div>
+</body>
+</html>
