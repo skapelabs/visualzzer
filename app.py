@@ -2,16 +2,85 @@
 """
 Flask web application for the Data Structure Visualizer
 """
-
-from flask import Flask, render_template, request, jsonify, send_file
 import os
-import random
+import sys
 import json
+import subprocess
+import random
+import threading
 from datetime import datetime
+from pathlib import Path
+
 from dotenv import load_dotenv
+from flask import Flask, render_template, request, jsonify, send_file
+from openai import OpenAI
+from PyQt5.QtWidgets import QApplication
+
+# Import our markdown display module
+from ai_markdown_display import display_ai_response
+
+# Function to check and create .env file if it doesn't exist
+def ensure_env_file_exists():
+    """Check if .env file exists, if not create it and prompt for API key"""
+    env_path = Path('.env')
+    env_exists = env_path.exists()
+    
+    if not env_exists:
+        print("\n⚠️ No .env file found. Creating one now...")
+        api_key = input("\n🔑 Please enter your OpenRouter API key (starts with 'sk-'): ")
+        
+        # Create basic .env file with the provided API key
+        with open('.env', 'w') as f:
+            f.write(f"OPENROUTER_API_KEY={api_key}\n")
+            f.write("SECRET_KEY=auto_generated_secret_key\n")
+            f.write("DEBUG=True\n")
+            f.write("PORT=9090\n")
+            f.write("API_PORT=5000\n")
+        
+        print("✅ .env file created successfully!")
+        return True
+    return False
+
+# Ensure .env file exists before loading
+env_created = ensure_env_file_exists()
 
 # Load environment variables from .env file
 load_dotenv()
+
+# Verify API key exists and is valid
+def verify_api_key():
+    """Verify that a valid API key exists"""
+    # Check for OpenRouter API key first, then fall back to OpenAI API key
+    api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
+    
+    if not api_key:
+        print("❌ No API key found. Please set OPENROUTER_API_KEY or OPENAI_API_KEY in your .env file.")
+        return False, None
+    
+    # Check if key starts with sk-
+    if not api_key.startswith("sk-"):
+        print("⚠️ Warning: API key doesn't start with 'sk-'. This may not be a valid API key.")
+        return False, api_key
+    
+    # Mask the API key for logging
+    masked_key = f"{api_key[:7]}{'*' * (len(api_key) - 7)}"
+    print(f"✅ API key loaded: {masked_key}")
+    return True, api_key
+
+# Initialize OpenAI client only if API key is valid
+key_valid, api_key = verify_api_key()
+client = None
+if key_valid:
+    client = OpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=api_key,
+    )
+
+# Print startup verification
+print("\n=== Flask App Startup Verification ===")
+print(f".env file found: {'✅' if os.path.exists('.env') else '❌'}")
+print(f"API key loaded: {'✅' if api_key else '❌'}")
+print(f"Key starts with sk-: {'✅' if api_key and api_key.startswith('sk-') else '❌'}")
 
 app = Flask(__name__)
 
@@ -179,30 +248,66 @@ def run_visualizer():
 
 @app.route('/api/ask_ai', methods=['POST'])
 def ask_ai():
-    """API endpoint for AI Mode queries - forwards to API server"""
+    """API endpoint to ask AI a question about data structures and algorithms"""
     try:
-        # Forward the request to the API server
-        import requests
+        # Check if client is properly initialized
+        if client is None:
+            print("❌ AI request failed: OpenAI client not initialized")
+            return jsonify({"response": "AI unavailable. Please check your API key or network."}), 503
         
         data = request.get_json()
-        query = data.get('question', '').strip()
+        question = data.get("question", "")
+        display_in_pyqt = data.get("display_in_pyqt", False)
         
-        if not query:
-            return jsonify({"response": "Please ask something about data structures or algorithms."}), 400
+        if not question:
+            return jsonify({"response": "Please provide a question."}), 400
+        
+        # Mask API key in logs
+        masked_key = f"{api_key[:7]}{'*' * (len(api_key) - 7)}" if api_key else "None"
+        print(f"Making AI request with key: {masked_key}")
+        
+        # Make the API request with proper error handling
+        try:
+            completion = client.chat.completions.create(
+                model="openai/gpt-oss-20b:free",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that explains data structures and algorithms simply and visually."},
+                    {"role": "user", "content": question}
+                ],
+                extra_headers={
+                    "HTTP-Referer": f"http://localhost:{port}",  # your site url
+                    "X-Title": "Data Structure Visualizer",  # app name
+                }
+            )
             
-        # Forward to API server running on port 5090
-        api_response = requests.post(
-            'http://127.0.0.1:5090/api/ask_ai',
-            json={"question": query},
-            timeout=30
-        )
-        
-        # Return the API response
-        return api_response.json(), api_response.status_code
-        
+            answer = completion.choices[0].message.content
+            
+            # If display_in_pyqt flag is set, show the response in a PyQt window
+            if display_in_pyqt:
+                # Launch in a separate thread to avoid blocking the Flask server
+                threading.Thread(target=lambda: display_ai_response(answer, f"AI Response: {question[:30]}...")).start()
+            
+            return jsonify({"response": answer})
+            
+        except Exception as api_error:
+            print(f"❌ OpenRouter API error: {str(api_error)}")
+            # Keep the app running but return a friendly error message
+            return jsonify({"response": "AI unavailable. Please check your key or network."}), 503
+
     except Exception as e:
-        return jsonify({"error": f"Error connecting to API server: {str(e)}"}), 500
+        print(f"❌ General error in ask_ai endpoint: {str(e)}")
+        return jsonify({"response": "Something went wrong. Please try again later."}), 500
+
+
 
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 9080))
+    # Get port from environment variables with fallback
+    port = int(os.getenv('PORT', 9090))
+    
+    # Print final verification message
+    print(f"Flask app running at port: ✅ {port}")
+    print("=== Server Starting ===\n")
+    
+    # Run the Flask app
     app.run(host='0.0.0.0', port=port)
+

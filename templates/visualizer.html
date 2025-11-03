@@ -229,13 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
         launchBtn.disabled = true;
         launchStatus.innerHTML = '<div class="loading-message">Starting visualizer...</div>';
         
-        fetch('/run-visualizer', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ numbers: selectedNumbers })
-        })
+        fetch('/run-visualizer')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
