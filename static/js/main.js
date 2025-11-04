@@ -1,4 +1,4 @@
-// Main JavaScript file for the Sorting Algorithm Visualizer web app
+// Main JavaScript file for the Algorithm Visualizer web app
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize the application
@@ -14,6 +14,12 @@ function initializeApp() {
     
     // Add interactive elements
     addInteractiveElements();
+    
+    // Add mobile menu functionality
+    setupMobileMenu();
+    
+    // Add navbar scroll effect
+    setupNavbarScroll();
 }
 
 function addSmoothScrolling() {
@@ -33,7 +39,7 @@ function addSmoothScrolling() {
 }
 
 function addLoadingAnimations() {
-    // Add fade-in animation to elements
+    // Add fade-in animation to elements using IntersectionObserver
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -42,19 +48,86 @@ function addLoadingAnimations() {
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('visible');
+                // Unobserve after animation to improve performance
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    // Observe elements for animation
-    document.querySelectorAll('.feature-card, .algorithm-card, .tip-card, .step').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    // Observe elements with fade-in class for animation
+    document.querySelectorAll('.fade-in').forEach(el => {
         observer.observe(el);
     });
+}
+
+function setupMobileMenu() {
+    // Mobile menu toggle functionality
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+    }
+    
+    // Add mobile menu styles
+    const style = document.createElement('style');
+    const css = `
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(11, 11, 13, 0.95);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: clip-path 0.4s ease-in-out;
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            .menu-toggle.active span:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .menu-toggle.active span:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+    `;
+    
+    style.textContent = css;
+    document.head.appendChild(style);
+}
+
+function setupNavbarScroll() {
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    }
 }
 
 function addInteractiveElements() {
